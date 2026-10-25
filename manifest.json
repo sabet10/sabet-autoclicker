@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "SABET Auto Trader",
+  "version": "1.0",
+  "description": "Auto trade for WinGo",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://dkwin9.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://dkwin9.com/*"],
+      "js": ["content.js"],
+      "css": ["style.css"]
+    }
+  ]
+}
