@@ -12,37 +12,44 @@ function executeTrade() {
         status.innerText = `Clicked: ${isBig ? 'BIG' : 'SMALL'}`;
         status.style.color = "#00ffcc";
 
-        // ২. টাকার পরিমাণ সিলেক্ট করা (শুধু নিচের গুলোর মধ্যে)
+        // ২. শুধু নিচের টাকার বাটনগুলো খোঁজা (Total amount এর ঠিক উপরে)
         setTimeout(() => {
-            // নিচের বাটনগুলো খোঁজা (X1, X5 এর লাইনে)
-            const bottomButtons = Array.from(document.querySelectorAll('div, span')).filter(el => {
-                // শুধু নিচের বাটনগুলো ফিল্টার করা (যেগুলোতে 1, 10, 20, 50, 100 লেখা আছে)
-                const txt = el.innerText ? el.innerText.trim() : '';
-                return txt === activeAmount && el.offsetParent !== null;
-            });
-
-            // যদি একাধিক পাওয়া যায়, তবে শেষেরটা নিবে (যেটা নিচে থাকে)
-            let amtBtn = bottomButtons.length > 0 ? bottomButtons[bottomButtons.length - 1] : null;
+            let amtBtn = null;
+            const totalAmtText = document.querySelector('div, span, button');
+            
+            // ওয়েবসাইটের নিচের বাটনগুলো যেখানে 'Total amount' লেখা আছে তার আশেপাশে খুঁজবো
+            const allElements = Array.from(document.querySelectorAll('div, span, button'));
+            
+            // যেসব এলিমেন্টে Total amount লেখা আছে, সেগুলোর আগের এলিমেন্টগুলো চেক করবো
+            for (let i = 0; i < allElements.length; i++) {
+                let el = allElements[i];
+                let txt = el.innerText ? el.innerText.trim() : '';
+                if (txt.includes('Total amount')) {
+                    // এর আশেপাশের ২০টা এলিমেন্টের মধ্যে activeAmount খুঁজবো
+                    for (let j = Math.max(0, i - 20); j < i; j++) {
+                        let targetEl = allElements[j];
+                        if (targetEl.innerText && targetEl.innerText.trim() === activeAmount && targetEl.offsetParent !== null) {
+                            amtBtn = targetEl;
+                            break;
+                        }
+                    }
+                    if (amtBtn) break;
+                }
+            }
 
             if(amtBtn) {
                 amtBtn.click();
                 status.innerText = `Amount: ${activeAmount}`;
                 
-                // ৩. কনফার্ম বাটনে ক্লিক করা (Total amount)
+                // ৩. Total amount বাটনে ক্লিক করা
                 setTimeout(() => {
-                    // নিচের "Total amount" লেখা বাটন খোঁজা
-                    const confirmBtns = Array.from(document.querySelectorAll('div, button, span')).filter(el => {
-                        const txt = el.innerText ? el.innerText.toUpperCase() : '';
-                        return txt.includes('TOTAL AMOUNT') && el.offsetParent !== null;
-                    });
-
-                    if(confirmBtns.length > 0) {
-                        // শেষের বাটনে ক্লিক করবে (যেটা নিচে থাকে)
-                        confirmBtns[confirmBtns.length - 1].click();
-                        status.innerText = "✅ TRADE SUCCESSFUL!";
-                        status.style.color = "#00ff88";
-                    } else {
-                        status.innerText = "❌ Confirm btn not found";
+                    for (let el of allElements) {
+                        if (el.innerText && el.innerText.toUpperCase().includes('TOTAL AMOUNT') && el.offsetParent !== null) {
+                            el.click();
+                            status.innerText = "✅ TRADE SUCCESSFUL!";
+                            status.style.color = "#00ff88";
+                            break;
+                        }
                     }
                 }, 1000);
             } else {
