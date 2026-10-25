@@ -1,0 +1,77 @@
+/* SABET Auto Trader Floating UI */
+#sabet-auto-panel {
+    position: fixed;
+    top: 80px;
+    right: 10px;
+    width: 250px;
+    background: linear-gradient(145deg, #0a0a0a, #1a1a2e);
+    border: 2px solid #00ffcc;
+    border-radius: 14px;
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    z-index: 999999;
+    box-shadow: 0 0 20px #00ffcc88;
+    padding: 12px;
+    direction: ltr;
+}
+#sabet-auto-panel h3 {
+    margin: 0 0 8px;
+    text-align: center;
+    color: #00ffcc;
+    font-size: 15px;
+    text-shadow: 0 0 8px #00ffcc;
+    letter-spacing: 1px;
+}
+.sabet-amount-btns {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.sabet-amount-btns button {
+    flex: 1;
+    margin: 0 2px;
+    padding: 6px 0;
+    background: #111;
+    color: #fff;
+    border: 1px solid #00ffcc;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+}
+.sabet-amount-btns button.active {
+    background: #00ffcc;
+    color: #000;
+    box-shadow: 0 0 10px #00ffcc;
+}
+#sabet-start-btn {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(90deg, #00ffcc, #00ccff);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-weight: 900;
+    font-size: 14px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    margin-top: 5px;
+}
+#sabet-start-btn.scanning {
+    background: linear-gradient(90deg, #ffd700, #ff8800);
+    animation: sabet-pulse 1s infinite;
+}
+#sabet-start-btn.scanning::after {
+    content: " Scanning...";
+}
+@keyframes sabet-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+.sabet-status {
+    text-align: center;
+    font-size: 11px;
+    color: #aaa;
+    margin-top: 6px;
+    min-height: 14px;
+      }
