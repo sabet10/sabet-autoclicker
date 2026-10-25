@@ -12,34 +12,36 @@ function executeTrade() {
         status.innerText = `Clicked: ${isBig ? 'BIG' : 'SMALL'}`;
         status.style.color = "#00ffcc";
 
-        // ২. শুধু নিচের টাকার বাটনগুলো খোঁজা (Total amount এর ঠিক উপরে)
+        // ২. শুধু নিচের টাকার বাটনগুলো খোঁজা (Quantity এর নিচে)
         setTimeout(() => {
-            let amtBtn = null;
-            const totalAmtText = document.querySelector('div, span, button');
-            
-            // ওয়েবসাইটের নিচের বাটনগুলো যেখানে 'Total amount' লেখা আছে তার আশেপাশে খুঁজবো
+            // "Balance" লেখাটা খুঁজে বের করবো, যাতে তার নিচের বাটনগুলো ফিল্টার করা যায়
             const allElements = Array.from(document.querySelectorAll('div, span, button'));
+            let balanceIndex = -1;
             
-            // যেসব এলিমেন্টে Total amount লেখা আছে, সেগুলোর আগের এলিমেন্টগুলো চেক করবো
+            // Balance এর পজিশন বের করা
             for (let i = 0; i < allElements.length; i++) {
-                let el = allElements[i];
-                let txt = el.innerText ? el.innerText.trim() : '';
-                if (txt.includes('Total amount')) {
-                    // এর আশেপাশের ২০টা এলিমেন্টের মধ্যে activeAmount খুঁজবো
-                    for (let j = Math.max(0, i - 20); j < i; j++) {
-                        let targetEl = allElements[j];
-                        if (targetEl.innerText && targetEl.innerText.trim() === activeAmount && targetEl.offsetParent !== null) {
-                            amtBtn = targetEl;
-                            break;
-                        }
+                if (allElements[i].innerText && allElements[i].innerText.trim() === 'Balance') {
+                    balanceIndex = i;
+                    break;
+                }
+            }
+
+            let amtBtn = null;
+            if (balanceIndex !== -1) {
+                // Balance এর পরে যেসব এলিমেন্ট আছে, সেগুলোর মধ্যে activeAmount খুঁজবো
+                for (let i = balanceIndex; i < allElements.length; i++) {
+                    let el = allElements[i];
+                    if (el.innerText && el.innerText.trim() === activeAmount && el.offsetParent !== null) {
+                        // চেক করবো এটা সত্যিই নিচের বাটন কিনা
+                        amtBtn = el;
+                        break; // প্রথম যেটা পাবে সেটাই নিবে (যেটা Quantity এর নিচে)
                     }
-                    if (amtBtn) break;
                 }
             }
 
             if(amtBtn) {
                 amtBtn.click();
-                status.innerText = `Amount: ${activeAmount}`;
+                status.innerText = `Amount: ${activeAmount} Selected`;
                 
                 // ৩. Total amount বাটনে ক্লিক করা
                 setTimeout(() => {
